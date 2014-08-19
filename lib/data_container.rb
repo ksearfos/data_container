@@ -19,11 +19,21 @@ class DataContainer < Struct
     '#<DataContainer: ' + variable_value_pairs_string.join(' ') + '>'
   end
 
+  def merge!(other_data_container)
+    other_data_container.each_pair do |var, val|
+      set(var, val) unless val.nil?
+    end
+  end
+
   alias :data :members
 
   private
 
   def variable_value_pairs_string
     each_pair.map { |ivar, value| "#{ivar}=#{value.inspect}" }
+  end
+
+  def has_var?(var)
+    data.include?(var)
   end
 end

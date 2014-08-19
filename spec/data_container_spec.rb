@@ -48,4 +48,41 @@ describe DataContainer do
       expect(TestContainer.inspect).to eq(container_inspection)
     end
   end
+
+  describe "iterators" do
+    describe "#each" do
+      it "iterates through each value" do
+        str = ""
+        TestContainer.each { |value| str << value + ' ' }
+        expect(str).to eq('yum! ick ')
+      end
+    end
+
+    describe "#each_pair" do
+      it "iterates through each variable and its value" do
+        str = ""
+        TestContainer.each_pair { |ivar, value| str << "#{ivar.upcase}:#{value}**" }
+        expect(str).to eq('APPLE:yum!**BANANA:ick**')
+      end
+    end
+  end
+
+  describe "#merge" do
+    before(:all) do
+      Container1 = DataContainer.new(:var1, :var2)
+      Container2 = DataContainer.new(:var1, :var2)
+      Container1.var1 = :pig
+      Container1.var2 = :cow
+      Container2.var1 = :chicken
+      Container1.merge! Container2
+    end
+
+    it "merges all shared data in the given DataContainer to the data in self" do
+      expect(Container1.var1).to eq(:chicken)
+    end
+
+    it "ignores any nil shared values" do
+      expect(Container1.var2).to eq(:cow)
+    end
+  end
 end
