@@ -1,6 +1,6 @@
 DataContainer
 ----------
-## A container for data that is global to the project
+A container for data that is global to a project.  The DataContainer is an alternative to globals and passing configuration details between classes.
 
 ## Use
 
