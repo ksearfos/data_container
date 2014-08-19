@@ -15,11 +15,11 @@ class DataContainer < Struct
   end
 
   def to_s
-    "#<#{self}: #{variable_value_pairs_string}>"
+    '@' + variable_value_pairs_string.join(', @')
   end
 
   def inspect
-    "#<DataContainer#<#{self} #{variable_value_pairs_string}>>"
+    '#<DataContainer: ' + variable_value_pairs_string.join(' ') + '>'
   end
 
   alias :data :members
@@ -27,8 +27,6 @@ class DataContainer < Struct
   private
 
   def variable_value_pairs_string
-    str = ""
-    each_pair { |ivar, value| str << " #{ivar}=#{value.inspect}" }
-    str
+    each_pair.map { |ivar, value| "#{ivar}=#{value.inspect}" }
   end
 end
