@@ -84,10 +84,8 @@ describe DataContainer do
     before(:all) do
       Container1 = DataContainer.new(:var1, :var2)
       Container2 = DataContainer.new(:var1, :var2, :var3)
-      Container1.var1 = :pig
-      Container1.var2 = :cow
-      Container2.var1 = :chicken
-      Container2.var3 = :hen
+      Container1.populate_from_hash(var1: :pig, var2: :cow)
+      Container2.populate_from_hash(var1: :chicken, var2: nil, var3: :hen)
       Container1.merge! Container2
     end
 
@@ -100,7 +98,7 @@ describe DataContainer do
     end
 
     it 'does not merge non-shared values' do
-      expect(Container1.data).not_to include(:var3)
+      expect(Container1).not_to include(:var3)
     end
   end
 
