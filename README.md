@@ -51,7 +51,7 @@ COCONUT:
 
 ### Merging
 
-DataContainers can also be merged as a way to copy over shared values. This does not work quite the way a Hash#merge! does; only attributes that both DataContainers share will be copied.  Additionally, nil values in the merging DataContainer will be ignored, so as not to overwrite existing values.
+DataContainers can also be merged as a way to copy over shared values. This does not work quite the way `Hash#merge!` does; only attributes that both DataContainers share will be copied.  Additionally, nil values in the merging DataContainer will be ignored, so as not to overwrite existing values.
 
 **Example**
 ```
@@ -71,7 +71,7 @@ puts MyContainer
 
 ### Dynamic Setters and Getters
 
-Since structs don't actually have instance variables, DataContainers don't, either. Instead of forcing people to use send() any time they want to set/retrieve an attribute by name, the DataContainer comes equipped with the get() and set() methods.
+Since structs don't actually have instance variables, DataContainers don't, either. Instead of forcing people to use `send` any time they want to set/retrieve an attribute by name, the DataContainer comes equipped with the `get` and `set` methods.
 
 N.B. Both of these methods simply ignore attributes that do not exist for the DataContainer
 
