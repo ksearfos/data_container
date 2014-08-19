@@ -5,36 +5,36 @@ describe DataContainer do
     TestContainer = DataContainer.new(:apple, :banana)
   end
 
-  describe "#initialize" do
-    it "creates instance variables for each of the array entries" do
+  describe '#initialize' do
+    it 'creates instance variables for each of the array entries' do
       expect(TestContainer.data).to eq([:apple, :banana])
     end
 
-    it "sets each of those instance variables to nil" do
+    it 'sets each of those instance variables to nil' do
       expect(TestContainer.apple).to be_nil
       expect(TestContainer.banana).to be_nil
     end
   end
 
-  describe "#get" do
+  describe '#get' do
     before(:all) do
       TestContainer.apple = 'yum!'
       TestContainer.banana = 'ewwww :('
     end
 
-    it "retrieves the value of the variable name given" do
+    it 'retrieves the value of the variable name given' do
       expect(TestContainer.get(:apple)).to eq('yum!')
     end
   end
 
-  describe "#set" do
-    it "sets the variable given to the value provided" do
+  describe '#set' do
+    it 'sets the variable given to the value provided' do
       TestContainer.set(:banana, 'good with ice cream')
       expect(TestContainer.banana).to eq('good with ice cream')
     end
   end
 
-  describe "#to_s" do
+  describe '#to_s' do
     it "shows all of the DataContainer's values" do
       TestContainer.banana = 'ick'
       container_string = '@apple="yum!", @banana="ick"'
@@ -42,47 +42,67 @@ describe DataContainer do
     end
   end
 
-  describe "#inspect" do
-    it "shows the DataContainer class and its values" do
+  describe '#inspect' do
+    it 'shows the DataContainer class and its values' do
       container_inspection = '#<DataContainer: apple="yum!" banana="ick">'
       expect(TestContainer.inspect).to eq(container_inspection)
     end
   end
 
-  describe "iterators" do
-    describe "#each" do
-      it "iterates through each value" do
-        str = ""
+  describe 'iterators' do
+    describe '#each' do
+      it 'iterates through each value' do
+        str = ''
         TestContainer.each { |value| str << value + ' ' }
         expect(str).to eq('yum! ick ')
       end
     end
 
-    describe "#each_pair" do
-      it "iterates through each variable and its value" do
-        str = ""
+    describe '#each_pair' do
+      it 'iterates through each variable and its value' do
+        str = ''
         TestContainer.each_pair { |ivar, value| str << "#{ivar.upcase}:#{value}**" }
         expect(str).to eq('APPLE:yum!**BANANA:ick**')
       end
     end
   end
 
-  describe "#merge" do
+  describe '#merge' do
     before(:all) do
       Container1 = DataContainer.new(:var1, :var2)
-      Container2 = DataContainer.new(:var1, :var2)
+      Container2 = DataContainer.new(:var1, :var2, :var3)
       Container1.var1 = :pig
       Container1.var2 = :cow
       Container2.var1 = :chicken
+      Container2.var3 = :hen
       Container1.merge! Container2
     end
 
-    it "merges all shared data in the given DataContainer to the data in self" do
+    it 'merges all shared data in the given DataContainer into self' do
       expect(Container1.var1).to eq(:chicken)
     end
 
-    it "ignores any nil shared values" do
+    it 'ignores any nil shared values' do
       expect(Container1.var2).to eq(:cow)
+    end
+
+    it 'does not merge non-shared values' do
+      expect(Container1.data).not_to include(:var3)
+    end
+  end
+
+  describe '#include?' do
+    it 'determines whether the given value is one of its data' do
+      expect(TestContainer.include?(:apple)).to be_truthy
+      expect(TestContainer.include?(:coconut)).to be_falsy
+    end
+  end
+
+  describe '#populate_from_hash' do
+    it 'sets the data values according to the values in the hash' do
+      TestContainer.populate_from_hash(apple: 'core', banana: 'peel')
+      expect(TestContainer.apple).to eq('core')
+      expect(TestContainer.banana).to eq('peel')
     end
   end
 end

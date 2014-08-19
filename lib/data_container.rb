@@ -4,11 +4,11 @@ class DataContainer < Struct
   end
 
   def get(ivar)
-    send(ivar)
+    send(ivar) if include?(ivar)
   end
 
   def set(ivar, value)
-    send("#{ivar}=", value)
+    send("#{ivar}=", value) if include?(ivar)
   end
 
   def to_s
@@ -25,15 +25,19 @@ class DataContainer < Struct
     end
   end
 
-  alias :data :members
+  def include?(var)
+    data.include?(var.to_sym)
+  end
+
+  def populate_from_hash(hash)
+    hash.each { |var, val| set(var, val) }
+  end
+
+  alias_method :data, :members
 
   private
 
   def variable_value_pairs_string
     each_pair.map { |ivar, value| "#{ivar}=#{value.inspect}" }
-  end
-
-  def has_var?(var)
-    data.include?(var)
   end
 end
