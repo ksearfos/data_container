@@ -100,7 +100,8 @@ describe DataContainer do
 
   describe '#populate_from_hash' do
     it 'sets the data values according to the values in the hash' do
-      TestContainer.populate_from_hash(apple: 'core', banana: 'peel')
+      new_vals = { apple: 'core', banana: 'peel' }
+      TestContainer.populate_from_hash(new_vals)
       expect(TestContainer.apple).to eq('core')
       expect(TestContainer.banana).to eq('peel')
     end
