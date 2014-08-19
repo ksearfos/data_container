@@ -24,6 +24,7 @@ describe DataContainer do
 
     it "retrieves the value of the variable name given" do
       p TestContainer
+      puts TestContainer
       expect(TestContainer.get(:apple)).to eq('yum!')
     end
   end
