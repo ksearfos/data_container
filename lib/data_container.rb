@@ -1,9 +1,6 @@
 class DataContainer < Struct
   def self.new(*args)
-    new_class = super
-    @instance = new_class.new
-    p "created instance: #{@instance}"
-    @instance
+    super.new    # send back an INSTANCE, not a class
   end
 
   def get(ivar)
