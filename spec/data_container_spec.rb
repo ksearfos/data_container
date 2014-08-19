@@ -25,12 +25,25 @@ describe DataContainer do
     it 'retrieves the value of the variable name given' do
       expect(TestContainer.get(:apple)).to eq('yum!')
     end
+
+    context "when given a variable that doesn't exist" do
+      it 'returns nil' do
+        expect(TestContainer.get(:coconut)).to eq(nil)
+      end
+    end
   end
 
   describe '#set' do
     it 'sets the variable given to the value provided' do
       TestContainer.set(:banana, 'good with ice cream')
       expect(TestContainer.banana).to eq('good with ice cream')
+    end
+
+    context "when given a variable that doesn't exist" do
+      it 'does not set anything' do
+        TestContainer.set(:coconut, 'mmmmm')
+        expect(TestContainer.data).not_to include :coconut
+      end
     end
   end
 
