@@ -121,5 +121,11 @@ describe DataContainer do
       expect(TestContainer.apple).to eq('core')
       expect(TestContainer.banana).to eq('peel')
     end
+
+    context 'when given one or more hash keys that are not in the DataContainer' do
+      it 'raises an exception' do
+        expect { TestContainer.populate_from_hash(apple: 'brown betty', eel: 'slimy') }.to raise_exception
+      end
+    end
   end
 end
