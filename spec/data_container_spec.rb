@@ -110,14 +110,14 @@ describe DataContainer do
 
   describe "@defaults" do
     let(:defaults) do
-      { apple: 'core', banana: 'peel', coconut: nil }
+      { apple: 'core', banana: 'peel' }
     end
 
     let(:test_container_defaults) { TestContainer.instance_variable_get(:@defaults) }
 
     context "when no defaults have been provided" do
       it "is nil for each attribute in the DataContainer" do
-        expect(test_container_defaults).to eq({ apple: nil, banana: nil, coconut: nil })
+        expect(test_container_defaults).to eq({ apple: nil, banana: nil })
       end
     end
 
