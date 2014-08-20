@@ -6,6 +6,6 @@ Gem::Specification.new do |spec|
   spec.description = 'DataContainers store global/configuration values used throughout a project, but not belonging to any individual object'
   spec.author      = 'Kelli Searfos'
   spec.email       = ['ksearfos@gmail.com']
-  spec.homepage    = 'https://rubygems.org/gems/data_container'
+  spec.homepage    = 'https://github.com/ksearfos/data_container'
   spec.files       = ['lib/data_container.rb']
 end
