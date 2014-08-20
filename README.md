@@ -18,18 +18,32 @@ MyContainer.banana   `#==> don't slip on the peel!
 
 ### Setting multiple values at once
 
-In addition to the standard struct-type options, a DataContainer can take a hash to set its data.  The hash's keys should be the attributes you want to set, and the values their values.  Any keys that are _not_ attributes of your DataContainer will simply be ignored.  Any attributes that do not have a corresponding key in the hash will retain their current values.
+In addition to the standard struct-type options, a DataContainer can take a hash to set its data, either at initialization or later.  The hash's keys should be the attributes you want to set, and the values their values.
+
+If the hash is passed in at initialization, then the DataContainer will have an attribute for each key, and no more.
+
+If the DataContainer has already been initialized, then the hash keys must correspond to existing attributes, or else an exception will be raised.  Any attributes that do not have a corresponding key in the hash will retain their current values.
 
 N.B. This will overwrite existing values!
 
-**Example**
+**Example: create new data container with values**
+```
+ValuedContainer = DataContainer.new(car: 'Honda Accord', age: 33, location: 'Ohio')
+puts ValuedContainer
+#==> #<DataContainer car='Honda Accord', age=33, location='Ohio'>
+```
+
+**Example: populate existing DataContainer**
 ```
 puts MyContainer
-#==> @apple=nil, @banana="don't slip on the peel!", @cucumber=nil
+#==> #<DataContainer apple=nil, banana="don't slip on the peel!", cucumber=nil>
 
-MyContainer.populate_from_hash(apple: "my favorite!", banana: "yummy with ice cream", grapefruit: 'sour :X')
+MyContainer.populate_from_hash(apple: "my favorite!", banana: "yummy with ice cream")
 puts MyContainer
-#==> @apple="my favorite!", @banana="yummy with ice cream", @cucumber=nil
+#==> #<apple="my favorite!", @banana="yummy with ice cream", @cucumber=nil>
+
+MyContainer.populate_from_hash(apple: 'mmmm', grapefruit: 'too sour!')
+#==> DataContainer::AttributeError undefined attribute 'grapefruit'
 ```
 
 ### Iteration
@@ -47,26 +61,6 @@ MyContainer.each_pair { |var, val| puts "#{var.upcase}: #{val}" }
 #==> APPLE: "my favorite!"
 BANANA: "yummy with ice cream"
 COCONUT:
-```
-
-### Merging
-
-DataContainers can also be merged as a way to copy over shared values. This does not work quite the way `Hash#merge!` does; only attributes that both DataContainers share will be copied.  Additionally, nil values in the merging DataContainer will be ignored, so as not to overwrite existing values.
-
-**Example**
-```
-OtherContainer = DataContainer.new(:apple, :banana, :grapefruit)
-OtherContainer.apple = 'best in autumn'
-
-puts OtherContainer
-#==> @apple="best in autumn", @banana=nil, @grapefruit=nil
-
-puts MyContainer
-#==> @apple="my favorite!, @banana="yummy with ice cream", @coconut=nil
-
-MyContainer.merge!(OtherContainer)
-puts MyContainer
-#==> @apple="best in autumn", @banana="yummy with ice cream", @coconut=nil
 ```
 
 ### Dynamic Setters and Getters
