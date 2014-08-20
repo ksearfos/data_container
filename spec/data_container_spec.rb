@@ -27,8 +27,8 @@ describe DataContainer do
     end
 
     context "when given a variable that doesn't exist" do
-      it 'returns nil' do
-        expect(TestContainer.get(:coconut)).to eq(nil)
+      it 'raises and exception' do
+        expect { TestContainer.get(:coconut) }.to raise_exception(DataContainer::AttributeError)
       end
     end
   end
@@ -42,23 +42,22 @@ describe DataContainer do
     context "when given a variable that doesn't exist" do
       it 'raises an exception' do
         expect { TestContainer.set(:coconut, 'mmmmm') }.to raise_exception(DataContainer::AttributeError)
-        TestContainer.set(:coconut, 'mmmmm')
       end
     end
   end
 
   describe '#to_s' do
-    it "shows all of the DataContainer's values" do
+    it "shows the DataContainer class and its values" do
       TestContainer.banana = 'ick'
-      container_string = '@apple="yum!", @banana="ick"'
+      container_string = '#<DataContainer: apple="yum!" banana="ick">'
       expect(TestContainer.to_s).to eq(container_string)
     end
   end
 
   describe '#inspect' do
-    it 'shows the DataContainer class and its values' do
-      container_inspection = '#<DataContainer: apple="yum!" banana="ick">'
-      expect(TestContainer.inspect).to eq(container_inspection)
+    it 'shows the DataContainer class and its object ID' do
+      container_inspection = /#<DataContainer:0x\d+/
+      expect(TestContainer.inspect).to match container_inspection
     end
   end
 

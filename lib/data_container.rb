@@ -5,6 +5,11 @@ class DataContainer < Struct
     super.new    # send back an INSTANCE, not a class
   end
 
+  def initialize
+    @defaults = {}
+    members.each { |attr| @defaults[attr] = nil }
+  end
+
   def get(ivar)
     if include?(ivar)
       send(ivar)
