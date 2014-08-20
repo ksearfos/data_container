@@ -40,7 +40,7 @@ puts MyContainer
 
 MyContainer.populate_from_hash(apple: "my favorite!", banana: "yummy with ice cream")
 puts MyContainer
-#==> #<apple="my favorite!", @banana="yummy with ice cream", @cucumber=nil>
+#==> #<apple="my favorite!", banana="yummy with ice cream", cucumber=nil>
 
 MyContainer.populate_from_hash(apple: 'mmmm', grapefruit: 'too sour!')
 #==> DataContainer::AttributeError undefined attribute 'grapefruit'
