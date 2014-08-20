@@ -29,6 +29,13 @@ describe DataContainer do
         expect(HashContainer.banana).to eq('ewww')
       end
     end
+
+    context "when given anything other than a hash or a list of symbols/strings" do
+      it "raises an exception" do
+        expect { DataContainer.new(12345) }.to raise_exception
+        expect { DataContainer.new(['a', 'b', 'c']) }.to raise_exception
+      end
+    end
   end
 
   describe '#get' do
