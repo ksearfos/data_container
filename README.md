@@ -4,7 +4,7 @@ A container for data that is global to a project.  The DataContainer is an alter
 
 ### Use
 
-A DataContainer acts very similar to a Struct object, except that it returns an instance rather than a class.  Much like a struct, you pass in the attributes you want your DataContainer to have and you will get back an object with setters and getters for each of those.  By default, all attributes are nil.
+A DataContainer is very similar to a Struct object, except that it returns an instance rather than a class.  Much like a struct, you pass in the attributes you want your DataContainer to have and you will get back an object with setters and getters for each of those.  By default, all attributes are nil.
 
 **Example**
 ```
@@ -22,18 +22,18 @@ In addition to the standard struct-type options, a DataContainer can take a hash
 
 If the hash is passed in at initialization, then the DataContainer will have an attribute for each key, and no more.
 
-If the DataContainer has already been initialized, then the hash keys must correspond to existing attributes, or else an exception will be raised.  Any attributes that do not have a corresponding key in the hash will retain their current values.
-
-N.B. This will overwrite existing values!
-
-**Example: create new data container with values**
+**Example**
 ```
 ValuedContainer = DataContainer.new(car: 'Honda Accord', age: 33, location: 'Ohio')
 puts ValuedContainer
 #==> #<DataContainer car='Honda Accord', age=33, location='Ohio'>
 ```
 
-**Example: populate existing DataContainer**
+If the DataContainer has already been initialized, then the hash keys must correspond to existing attributes, or else an exception will be raised.  Any attributes that do not have a corresponding key in the hash will retain their current values.
+
+N.B. This will overwrite existing values!
+
+**Example**
 ```
 puts MyContainer
 #==> #<DataContainer apple=nil, banana="don't slip on the peel!", cucumber=nil>
