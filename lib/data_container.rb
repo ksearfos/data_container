@@ -2,24 +2,21 @@ class DataContainer < Struct
   class AttributeError < StandardError; end
 
   def self.new(*args)
-    super.new    # send back an INSTANCE, not a class
+    if args.size == 1 && args.first.is_a?(Hash)    # actually given a hash, not an array of values
+      new_class = super(*args.first.keys)
+      new_class.new(*args.first.values)
+    else
+      new_class = super(*args)   # Struct constructor
+      new_class.new              # send back an INSTANCE, not a class
+    end
   end
 
-  def initialize
-    @defaults = {}
-    members.each { |attr| @defaults[attr] = nil }
-  end
-
-  def add_defaults(defaults_hash)
-    @defaults.merge!(defaults_hash)
+  def initialize(*args)
+    super    # Instance of Struct/new class constructor
   end
 
   def get(ivar)
-    if include?(ivar)
-      send(ivar)
-    else
-      raise AttributeError, attribute_error_message(ivar)
-    end
+    do_if_included(ivar) { send(ivar) }
   end
 
   def set(ivar, value)
@@ -31,21 +28,12 @@ class DataContainer < Struct
   end
 
   def to_s
-    '#<DataContainer: ' + variable_value_pairs_string.join(' ') + '>'
+    "#<#{name} " + variable_value_pairs_string.join(', ') + '>'
   end
-
-  def inspect
-    "#<DataContainer:0x#{self.object_id}>"
-  end
+  alias_method :inspect, :to_s
 
   def name
     'DataContainer'
-  end
-
-  def merge!(other_data_container)
-    other_data_container.each_pair do |var, val|
-      set(var, val) if include?(var) && !val.nil?
-    end
   end
 
   def include?(var)
@@ -66,5 +54,9 @@ class DataContainer < Struct
 
   def attribute_error_message(attr)
     "undefined attribute '#{attr}' for #{inspect} with backtrace:"
+  end
+
+  def do_if_included(ivar)
+    include?(ivar) ? yield(ivar) : raise(AttributeError, attribute_error_message(ivar))
   end
 end

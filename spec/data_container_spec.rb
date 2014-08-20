@@ -6,13 +6,28 @@ describe DataContainer do
   end
 
   describe '#initialize' do
-    it 'creates instance variables for each of the array entries' do
-      expect(TestContainer.data).to eq([:apple, :banana])
+    context "when given a list of symbols/strings" do
+      it 'creates attributes for each of the array entries' do
+        expect(TestContainer.data).to eq([:apple, :banana])
+      end
+
+      it 'sets each of those attributes to nil' do
+        expect(TestContainer.apple).to be_nil
+        expect(TestContainer.banana).to be_nil
+      end
     end
 
-    it 'sets each of those instance variables to nil' do
-      expect(TestContainer.apple).to be_nil
-      expect(TestContainer.banana).to be_nil
+    context "when given a hash" do
+      before(:all) { HashContainer = DataContainer.new(apple: 'delish', banana: 'ewww') }
+
+      it 'creates attributes from each of the hash keys' do
+        expect(HashContainer.data).to eq([:apple, :banana])
+      end
+
+      it 'sets each of those attributes to the corresponding hash value' do
+        expect(HashContainer.apple).to eq('delish')
+        expect(HashContainer.banana).to eq('ewww')
+      end
     end
   end
 
@@ -27,7 +42,7 @@ describe DataContainer do
     end
 
     context "when given a variable that doesn't exist" do
-      it 'raises and exception' do
+      it 'raises an exception' do
         expect { TestContainer.get(:coconut) }.to raise_exception(DataContainer::AttributeError)
       end
     end
@@ -49,19 +64,19 @@ describe DataContainer do
   describe '#to_s' do
     it "shows the DataContainer class and its values" do
       TestContainer.banana = 'ick'
-      container_string = '#<DataContainer: apple="yum!" banana="ick">'
-      expect(TestContainer.to_s).to eq(container_string)
+      container_string = /DataContainer.*apple="yum!".*banana="ick"/
+      expect(TestContainer.to_s).to match container_string
     end
   end
 
   describe '#inspect' do
-    it 'shows the DataContainer class and its object ID' do
-      container_inspection = /#<DataContainer:0x\d+/
+    it 'shows the DataContainer class and its values' do
+      container_inspection = /DataContainer.*apple="yum!".*banana="ick"/
       expect(TestContainer.inspect).to match container_inspection
     end
   end
 
-  describe 'iterators' do
+  describe 'iterators' do   # inherited as part of Struct, but I wanted to make sure they worked as anticipated
     describe '#each' do
       it 'iterates through each value' do
         str = ''
@@ -86,45 +101,9 @@ describe DataContainer do
     end
   end
 
-  describe "@defaults" do
-    let(:defaults) do
-      { apple: 'core', banana: 'peel' }
-    end
-
-    let(:test_container_defaults) { TestContainer.instance_variable_get(:@defaults) }
-
-    context "when no defaults have been provided" do
-      it "is nil for each attribute in the DataContainer" do
-        expect(test_container_defaults).to eq({ apple: nil, banana: nil })
-      end
-    end
-
-    describe "#add_defaults" do
-      it "sets default values according to the given hash" do
-        TestContainer.add_defaults(defaults)
-        expect(test_container_defaults).to eq(defaults)
-      end
-    end
-
-    describe "#apply_defaults" do
-      it "applies the default values, if any" do
-        TestContainer.apply_defaults
-        expect(TestContainer.to_h).to eq(defaults)
-      end
-    end
-  end
-
   describe "#name" do
     it "is DataContainer" do
       expect(TestContainer.name).to eq('DataContainer')
-    end
-
-    context "when referenced in an error" do
-      it "refers to the DataContainer by name" do
-        expect do
-          expect { TestContainer.goldfish }.to raise_exception
-        end.to output(/DataContainer/).to stdout
-      end
     end
   end
 
