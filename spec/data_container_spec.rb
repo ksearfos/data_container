@@ -40,9 +40,9 @@ describe DataContainer do
     end
 
     context "when given a variable that doesn't exist" do
-      it 'does not set anything' do
+      it 'raises an exception' do
+        expect { TestContainer.set(:coconut, 'mmmmm') }.to raise_exception(DataContainer::AttributeError)
         TestContainer.set(:coconut, 'mmmmm')
-        expect(TestContainer.data).not_to include :coconut
       end
     end
   end
@@ -106,6 +106,48 @@ describe DataContainer do
     it 'determines whether the given value is one of its data' do
       expect(TestContainer.include?(:apple)).to be_truthy
       expect(TestContainer.include?(:coconut)).to be_falsy
+    end
+  end
+
+  describe "@defaults" do
+    let(:defaults) do
+      { apple: 'core', banana: 'peel', coconut: nil }
+    end
+
+    let(:test_container_defaults) { TestContainer.instance_variable_get(:@defaults) }
+
+    context "when no defaults have been provided" do
+      it "is nil for each attribute in the DataContainer" do
+        expect(test_container_defaults).to eq({ apple: nil, banana: nil, coconut: nil })
+      end
+    end
+
+    describe "#add_defaults" do
+      it "sets default values according to the given hash" do
+        TestContainer.add_defaults(defaults)
+        expect(test_container_defaults).to eq(defaults)
+      end
+    end
+
+    describe "#apply_defaults" do
+      it "applies the default values, if any" do
+        TestContainer.apply_defaults
+        expect(TestContainer.to_h).to eq(defaults)
+      end
+    end
+  end
+
+  describe "#name" do
+    it "is DataContainer" do
+      expect(TestContainer.name).to eq('DataContainer')
+    end
+
+    context "when referenced in an error" do
+      it "refers to the DataContainer by name" do
+        expect do
+          expect { TestContainer.goldfish }.to raise_exception
+        end.to output(/DataContainer/).to stdout
+      end
     end
   end
 

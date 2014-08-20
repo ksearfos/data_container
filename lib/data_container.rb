@@ -1,4 +1,6 @@
 class DataContainer < Struct
+  class AttributeError < StandardError; end
+
   def self.new(*args)
     super.new    # send back an INSTANCE, not a class
   end
@@ -8,20 +10,28 @@ class DataContainer < Struct
   end
 
   def set(ivar, value)
-    send("#{ivar}=", value) if include?(ivar)
+    if include?(ivar)
+      send("#{ivar}=", value)
+    else
+      raise AttributeError, attribute_error_message(ivar)
+    end
   end
 
   def to_s
-    '@' + variable_value_pairs_string.join(', @')
+    '#<DataContainer: ' + variable_value_pairs_string.join(' ') + '>'
   end
 
   def inspect
-    '#<DataContainer: ' + variable_value_pairs_string.join(' ') + '>'
+    "#<DataContainer:0x#{self.object_id}>"
+  end
+
+  def name
+    'DataContainer'
   end
 
   def merge!(other_data_container)
     other_data_container.each_pair do |var, val|
-      set(var, val) unless val.nil?
+      set(var, val) if include?(var) && !val.nil?
     end
   end
 
@@ -39,5 +49,9 @@ class DataContainer < Struct
 
   def variable_value_pairs_string
     each_pair.map { |ivar, value| "#{ivar}=#{value.inspect}" }
+  end
+
+  def attribute_error_message(attr)
+    "undefined attribute '#{attr}' for #{inspect} with backtrace:"
   end
 end
