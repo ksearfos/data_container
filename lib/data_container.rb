@@ -10,6 +10,10 @@ class DataContainer < Struct
     members.each { |attr| @defaults[attr] = nil }
   end
 
+  def add_defaults(defaults_hash)
+    @defaults.merge!(defaults_hash)
+  end
+
   def get(ivar)
     if include?(ivar)
       send(ivar)

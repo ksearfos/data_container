@@ -79,28 +79,6 @@ describe DataContainer do
     end
   end
 
-  describe '#merge' do
-    before(:all) do
-      Container1 = DataContainer.new(:var1, :var2)
-      Container2 = DataContainer.new(:var1, :var2, :var3)
-      Container1.populate_from_hash(var1: :pig, var2: :cow)
-      Container2.populate_from_hash(var1: :chicken, var2: nil, var3: :hen)
-      Container1.merge! Container2
-    end
-
-    it 'merges all shared data in the given DataContainer into self' do
-      expect(Container1.var1).to eq(:chicken)
-    end
-
-    it 'ignores any nil shared values' do
-      expect(Container1.var2).to eq(:cow)
-    end
-
-    it 'does not merge non-shared values' do
-      expect(Container1).not_to include(:var3)
-    end
-  end
-
   describe '#include?' do
     it 'determines whether the given value is one of its data' do
       expect(TestContainer.include?(:apple)).to be_truthy
