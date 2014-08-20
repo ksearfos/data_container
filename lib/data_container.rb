@@ -6,7 +6,11 @@ class DataContainer < Struct
   end
 
   def get(ivar)
-    send(ivar) if include?(ivar)
+    if include?(ivar)
+      send(ivar)
+    else
+      raise AttributeError, attribute_error_message(ivar)
+    end
   end
 
   def set(ivar, value)
