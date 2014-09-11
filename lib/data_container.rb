@@ -20,11 +20,7 @@ class DataContainer < Struct
   end
 
   def set(ivar, value)
-    if include?(ivar)
-      send("#{ivar}=", value)
-    else
-      raise AttributeError, attribute_error_message(ivar)
-    end
+    do_if_included(ivar) { send("#{ivar}=", value) }
   end
 
   def to_s
