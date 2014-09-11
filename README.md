@@ -83,3 +83,24 @@ MyContainer.set(var, "ALLERGIC!")     #==> @coconut="ALLERGIC!"
 var = :grapefruit
 MyContainer.set(var, "ALLERGIC!")     #==> nil
 ```
+
+## AccessControlledDataContainer
+
+This is a new class that gives the user the ability to freeze the DataContainer's attributes, preventing them from further modification.
+
+It works exactly the same way the generic DataContainer works (it's just a proxy!) but adds the lock and unlock methods.
+
+**Example**
+```
+BetterContainer = AccessControlledDataContainer.new(:apple, :banana, :coconut)
+BetterContainer.apple = 'juice'
+
+BetterContainer.lock(:apple, :banana)
+BetterContainer.apple                     #==> 'juice'
+BetterContainer.apple = 'jack'            #==> DataContainer::AttributeError cannot modify locked attribute 'apple'
+BetterContainer.set(:banana, 'pudding')   #==> DataContainer::AttributeError cannot modify locked attribute 'banana'
+
+BetterContainer.unlock(:banana)
+BetterContainer.banana = 'pudding'
+puts BetterContainer
+#==> #<AccessControlledDataContainer apple='juice', banana='pudding', coconut=nil>
