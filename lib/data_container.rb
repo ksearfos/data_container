@@ -56,6 +56,10 @@ class DataContainer < Struct
     "undefined attribute '#{attr}' for #{inspect} with backtrace:"
   end
 
+  def locked_attribute_error_message(attr)
+    "cannot modify locked attribute '#{attr}'"
+  end
+
   def do_if_included(ivar)
     include?(ivar) ? yield(ivar) : raise(AttributeError, attribute_error_message(ivar))
   end

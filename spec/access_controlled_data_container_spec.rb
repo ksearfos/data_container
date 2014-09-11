@@ -1,13 +1,14 @@
 require 'spec_helper'
 
-describe DataContainer do
+describe AccessControlledDataContainer do
   before(:all) do
-    TestContainer = DataContainer.new(:apple, :banana)
+    @cl = AccessControlledDataContainer
+    @container = @cl.new(:apple, :banana)
   end
 
   it_behaves_like 'DataContainer' do
-    subject { TestContainer }
-    let(:dc_class) { DataContainer }
+    subject { @container }
+    let(:dc_class) { @cl }
   end
   #
   # describe '#initialize' do
@@ -133,4 +134,27 @@ describe DataContainer do
   #     end
   #   end
   # end
+
+  describe '#lock' do
+    it 'locks the specified attribute from further editing' do
+      TestContainer.lock(:apple)
+      expect { TestContainer.apple='juice' }.to raise_exception
+    end
+
+    it "still allows access to the attribute's value" do
+      expect(TestContainer.apple).to eq('brown betty')
+    end
+
+    it 'also does not allow editing with set' do
+      expect { TestContainer.set(:apple, 'juice') }.to raise_exception
+    end
+  end
+
+  describe '#unlock' do
+    it 'releases the lock on the specified attribute, allowing editing' do
+      TestContainer.lock(:apple)    # for tests run in isolation
+      TestContainer.unlock(:apple)
+      expect { TestContainer.apple='juice' }.not_to raise_exception
+    end
+  end
 end

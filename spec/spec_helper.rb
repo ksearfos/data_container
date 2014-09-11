@@ -1,5 +1,6 @@
 require 'rspec'
-require 'data_container'
+require 'access_controlled_data_container'
+require 'shared_examples'
 
 RSpec.configure do |config|
   config.fail_fast = true
