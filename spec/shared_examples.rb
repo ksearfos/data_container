@@ -66,14 +66,14 @@ shared_examples 'DataContainer' do
   describe '#to_s' do
     it "shows the DataContainer class and its values" do
       subject.banana = 'ick'
-      container_string = /DataContainer.*apple="yum!".*banana="ick"/
+      container_string = /#{dc_class}.*apple="yum!".*banana="ick"/
       expect(subject.to_s).to match container_string
     end
   end
 
   describe '#inspect' do
     it 'shows the DataContainer class and its values' do
-      container_inspection = /DataContainer.*apple="yum!".*banana="ick"/
+      container_inspection = /#{dc_class}.*apple="yum!".*banana="ick"/
       expect(subject.inspect).to match container_inspection
     end
   end
@@ -104,8 +104,8 @@ shared_examples 'DataContainer' do
   end
 
   describe "#name" do
-    it "is DataContainer" do
-      expect(subject.name).to eq('DataContainer')
+    it "is the name of the class" do
+      expect(subject.name).to eq(dc_class.to_s)
     end
   end
 
